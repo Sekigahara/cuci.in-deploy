@@ -2,14 +2,14 @@ version: "3.7"
 services:
 
   app:
-    image: sekigahara/cuci_in:1.0
+    image: sekigahara/cuci_in:1.2
     container_name: cuci_in-app
     restart: unless-stopped
     working_dir: /var/www/
     networks:
       - cuci_in
 
-  db:
+  mysql:
     image: mysql:8.0.21
     container_name: cuci_in-db
     restart: unless-stopped
