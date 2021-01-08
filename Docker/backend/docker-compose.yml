@@ -2,7 +2,7 @@ version: "3.7"
 services:
 
   app:
-    image: sekigahara/cuci_in:1.2
+    image: sekigahara/cuci_in:1.5
     container_name: cuci_in-app
     restart: unless-stopped
     working_dir: /var/www/
