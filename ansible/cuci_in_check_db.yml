@@ -1,0 +1,9 @@
+---
+# This playbook upload and load database in this site.
+
+- name: Load database with data
+  hosts: dbservers
+  remote_user: root
+
+  roles:
+    - db

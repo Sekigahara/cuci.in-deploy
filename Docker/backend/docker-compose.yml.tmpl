@@ -1,0 +1,44 @@
+version: "3.7"
+services:
+
+  app:
+    image: sekigahara/cuci_in:1.5
+    container_name: cuci_in-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    networks:
+      - cuci_in
+
+  mysql:
+    image: mysql:8.0.21
+    container_name: cuci_in-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - cuci_in
+    ports:
+      - 42333:3306
+
+  nginx:
+    image: nginx:1.17-alpine
+    container_name: cuci_in-nginx
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d
+    networks:
+      - cuci_in
+
+networks:
+  cuci_in:
+    name : cuci_in
