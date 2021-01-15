@@ -23,6 +23,9 @@ services:
       - traefik.http.routers.backend.tls.certresolver=lets-encrypt
       - traefik.port=443
     env_file: ".env"
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d
     networks:
       - cuci_in
     depends_on:
