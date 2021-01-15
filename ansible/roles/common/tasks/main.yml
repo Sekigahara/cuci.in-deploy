@@ -94,7 +94,7 @@
 
 - name: Read-write git checkout from github
   git:
-    repo: 'https://github.com/agustinanisaf/SquareCheck-infrastucture.git'
+    repo: 'https://github.com/Sekigahara/cuci.in-infrastructure'
     dest: /home/deploy/cuci_in
   become: yes
   become_user: deploy
