@@ -22,7 +22,13 @@ services:
       - traefik.http.routers.backend.tls=true
       - traefik.http.routers.backend.tls.certresolver=lets-encrypt
       - traefik.port=443
+      - traefik.docker.networks=cuci-in
     env_file: ".env"
+    healthcheck:
+      test: curl http://127.0.0.1 -s -f -o /dev/null || exit 1
+      interval: 10s
+      timeout: 10s
+      retries: 3
     volumes:
       - ./:/var/www
       - ./docker-compose/nginx:/etc/nginx/conf.d
