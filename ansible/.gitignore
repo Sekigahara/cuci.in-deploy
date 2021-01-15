@@ -1,4 +1,4 @@
-backup.sql
+init_db.sql
 .env
 hosts
 all

@@ -1,44 +1,70 @@
 version: "3.7"
 services:
-
-  app:
-    image: sekigahara/cuci_in:1.5
-    container_name: cuci_in-app
+  reverse-proxy:
+    image: traefik:v2.3
     restart: unless-stopped
-    working_dir: /var/www/
+    ports: 
+      - 80:80
+      - 443:443
+    volumes: 
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.toml:/traefik.toml
+      - ./traefik_dynamic.toml:/traefik_dynamic.toml
+      - ./acme.json:/acme.json
     networks:
       - cuci_in
 
-  mysql:
-    image: mysql:8.0.21
-    container_name: cuci_in-db
+  backend:
+    image: darywinata/cuci_in:backend
     restart: unless-stopped
-    environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_USER: ${DB_USERNAME}
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
+    labels: 
+      - traefik.http.routers.backend.rule=Host(`api.cuci-in.me`)
+      - traefik.http.routers.backend.tls=true
+      - traefik.http.routers.backend.tls.certresolver=lets-encrypt
+      - traefik.port=80
+    env_file: ".env"
+    healthcheck:
+      test: curl http://127.0.0.1 -s -f -o /dev/null || exit 1
+      interval: 10s
+      timeout: 10s
+      retries: 3
+    networks:
+      - cuci_in
+      - internal
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7.31
+    container_name: cuci_in-db
+    restart: unless-stopped        
+    env_file : ".env"
     volumes:
-      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+      - mysql_data:/var/lib/mysql
     networks:
       - cuci_in
     ports:
       - 42333:3306
 
-  nginx:
-    image: nginx:1.17-alpine
-    container_name: cuci_in-nginx
+  frontend:
+    image: darywinata/cuci_in:frontend
     restart: unless-stopped
-    ports:
-      - 8000:80
-    volumes:
-      - ./:/var/www
-      - ./docker-compose/nginx:/etc/nginx/conf.d
+    labels: 
+      - traefik.http.routers.frontend.rule=Host(`www.cuci-in.me`, `cuci-in.me`)
+      - traefik.http.routers.frontend.tls=true
+      - traefik.http.routers.frontend.tls.certresolver=lets-encrypt
+      - traefik.port=80
     networks:
       - cuci_in
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
+    driver: local
 
 networks:
   cuci_in:
-    name : cuci_in
+    external: true
+  internal:
+    external: false

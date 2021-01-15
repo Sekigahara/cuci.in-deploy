@@ -60,7 +60,7 @@
   ignore_errors: yes
 
 - name: Create Docker network
-  command: "docker network create square_check"
+  command: "docker network create cuci_in"
   # Command errors out when the network already exists - ignore
   ignore_errors: yes
 
@@ -80,7 +80,7 @@
 
 - name: Create App directory for the deploy user
   file:
-    path: /home/deploy/square_check
+    path: /home/deploy/cuci_in
     state: directory
     mode: '0755'
     owner: deploy
@@ -95,6 +95,6 @@
 - name: Read-write git checkout from github
   git:
     repo: 'https://github.com/agustinanisaf/SquareCheck-infrastucture.git'
-    dest: /home/deploy/square_check
+    dest: /home/deploy/cuci_in
   become: yes
   become_user: deploy

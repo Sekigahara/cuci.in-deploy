@@ -12,14 +12,8 @@ services:
   mysql:
     image: mysql:8.0.21
     container_name: cuci_in-db
-    restart: unless-stopped
-    environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_USER: ${DB_USERNAME}
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
+    restart: unless-stopped        
+    env_file : ".env"
     volumes:
       - ./docker-compose/mysql:/docker-entrypoint-initdb.d
     networks:

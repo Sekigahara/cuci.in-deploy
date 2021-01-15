@@ -1,6 +1,6 @@
 # Configure firewall
-resource "digitalocean_firewall" "cuci_in-check-firewall" {
-  name = "cuci_im-check-firewall"
+resource "digitalocean_firewall" "cuci-in-firewall" {
+  name = "cuci-in-firewall"
   droplet_ids = [digitalocean_droplet.cuci_in.id]
 
   inbound_rule {

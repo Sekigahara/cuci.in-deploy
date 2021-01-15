@@ -3,11 +3,11 @@
 
 - name: Copy sql dump
   copy:
-    src: backup.sql
-    dest: /home/deploy/square_check/backup.sql
+    src: init_db.sql
+    dest: /home/deploy/cuci_in/init_db.sql
 
 - name: Import dump to database
   # Hardcode search docker container name db
-  shell: cat backup.sql | docker exec -i $(docker ps -aqf "name=db") psql -U {{ DB_USERNAME }} {{ DB_DATABASE }}
+  shell: cat init_db.sql | docker exec -i $(docker ps -aqf "name=db") psql -U {{ DB_USERNAME }} {{ DB_DATABASE }}
   args:
-    chdir: /home/deploy/square_check
+    chdir: /home/deploy/cuci_in

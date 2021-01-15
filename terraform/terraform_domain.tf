@@ -1,6 +1,6 @@
 # Configure DNS
 resource "digitalocean_domain" "cuci_in-domain" {
-  name = "cuci_in.me"
+  name = "cuci-in.me"
   ip_address = digitalocean_droplet.cuci_in.ipv4_address
 }
 
