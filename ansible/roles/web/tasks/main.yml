@@ -4,22 +4,22 @@
 - name: Copy .env for docker-compose
   copy:
     src: .env
-    dest: /home/deploy/square_check/docker/.env
+    dest: /home/deploy/cuci_in/Docker/.env
 
 - name: Add traefik.toml config file
   template:
     src: traefik.toml.j2
-    dest: /home/deploy/square_check/docker/traefik.toml
+    dest: /home/deploy/cuci_in/Docker/traefik.toml
 
 - name: Add traefik_dynamic.toml config file
   template:
     src: traefik_dynamic.toml.j2
-    dest: /home/deploy/square_check/docker/traefik_dynamic.toml
+    dest: /home/deploy/cuci_in/Docker/traefik_dynamic.toml
 
 - name: Add acme.json config file
   copy:
     src: acme.json
-    dest: /home/deploy/square_check/docker/acme.json
+    dest: /home/deploy/cuci_in/Docker/acme.json
     owner: deploy
     group: deploy
     mode: '0600'
@@ -27,7 +27,7 @@
 - name: Copy docker-compose-update script
   copy:
     src: docker-compose-update.sh
-    dest: /home/deploy/square_check/docker/docker-compose-update.sh
+    dest: /home/deploy/cuci_in/Docker/docker-compose-update.sh
     owner: deploy
     group: deploy
     mode: '0755'
@@ -37,4 +37,4 @@
     name: Pull docker image everyday
     minute: "0"
     hour: "0"
-    job: "/home/deploy/square_check/docker/docker-compose-update.sh"
+    job: "/home/deploy/cuci_in/Docker/docker-compose-update.sh"
