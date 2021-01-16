@@ -1,7 +1,3 @@
-provider "digitalocean" {
-    token = var.api_token
-}
-
 //create droplet
 resource "digitalocean_droplet" "cuci_in" {
   image              = "ubuntu-20-04-x64"
@@ -11,22 +7,13 @@ resource "digitalocean_droplet" "cuci_in" {
   monitoring         = "true"
   ipv6               = "true"
   private_networking = "true"
-  ssh_keys           = [var.ssh_fingerprint]
-
-  provisioner "remote-exec" {
-    connection {
-      user = "root"
-      type = "ssh"
-      private_key = file(var.pvt_key)
-      host = digitalocean_droplet.cuci_in.ipv4_address
-      timeout = "2m"
-    }
-
-    inline = [
-        #install nginx
-        "sudo apt-get update",
-        "sudo apt-get -y install nginx"
-    ]
+  ssh_keys           = [data.digitalocean_ssh_key.cuci_in.id]
+  connection {
+    host =  self.ipv4_address
+    user = "root"
+    type = "ssh"
+    private_key = file(var.pvt_key)
+    timeout = "2m"
   }
 }
 

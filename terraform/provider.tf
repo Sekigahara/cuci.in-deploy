@@ -7,11 +7,14 @@ terraform {
   }
 }
 
-variable "api_token" {}
+variable "do_token" {}
 
-variable "ssh_fingerprint" {}
+provider "digitalocean" {
+  token = var.do_token
+}
+
+data "digitalocean_ssh_key" "cuci_in" {
+  name = "dossh-cuciin"
+}
 
 variable "pvt_key" {}
-
-variable "pub_key" {}
-
