@@ -36,7 +36,6 @@ services:
 
   db:
     image: mysql:5.7.31
-    container_name: cuci_in-db
     restart: unless-stopped        
     env_file : ".env"
     volumes:
