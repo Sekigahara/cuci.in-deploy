@@ -29,9 +29,6 @@ services:
       interval: 10s
       timeout: 10s
       retries: 3
-    volumes:
-      - ./:/var/www
-      - ./docker-compose/nginx:/etc/nginx/conf.d
     networks:
       - cuci_in
     depends_on:
